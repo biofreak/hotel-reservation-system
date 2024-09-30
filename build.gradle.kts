@@ -9,7 +9,13 @@ version = "0.0.1-SNAPSHOT"
 
 java {
 	toolchain {
-		languageVersion = JavaLanguageVersion.of(22)
+		languageVersion = JavaLanguageVersion.of(23)
+	}
+}
+
+configurations {
+	compileOnly {
+		extendsFrom(configurations.annotationProcessor.get())
 	}
 }
 
@@ -19,12 +25,22 @@ repositories {
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.springframework.boot:spring-boot-starter-jta-atomikos:2.7.1")
 	implementation("javax.transaction:jta:1.1")
 
+	compileOnly("org.projectlombok:lombok")
+	compileOnly("org.mapstruct:mapstruct:1.5.3.Final")
+	compileOnly("jakarta.ws.rs:jakarta.ws.rs-api")
+	compileOnly("org.glassfish.jersey.core:jersey-common")
+
 	runtimeOnly("org.postgresql:postgresql")
+
+	annotationProcessor("org.projectlombok:lombok")
+	annotationProcessor("org.mapstruct:mapstruct-processor:1.5.3.Final")
+	annotationProcessor("org.projectlombok:lombok-mapstruct-binding:0.2.0")
 
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
