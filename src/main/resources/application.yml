@@ -1,0 +1,57 @@
+app:
+  pagination-limit: 20
+
+spring:
+  data:
+    jpa:
+      repositories:
+        enabled: true
+  datasource:
+    url: jdbc:postgresql://localhost:5432/reservation_db
+    username: postgres
+    password: postgres
+    hikari:
+      schema: hotel_reservation_schema
+      data-source-properties:
+        rewriteBatchedStatements: true
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: create
+    generate-ddl: true
+    database: postgresql
+    show-sql: true
+    properties:
+      hibernate:
+        jakarta:
+          persistence:
+            schema-generation:
+              create-database-schemas: true
+        hbm2ddl:
+          auto: create
+          create_namespaces: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        default_schema: hotel_reservation_schema
+        transaction:
+          jta:
+            platform: com.atomikos.icatch.jta.hibernate4.AtomikosPlatform
+
+  jackson:
+    serialization:
+      write-null-map-values: false
+      write-empty-json-arrays: false
+
+  security:
+    user:
+      name: admin
+      password: 1308cf51-8da1-4aa0-966f-f3c0d0b066e7
+      roles: ADMIN
+
+logging:
+  level:
+    org:
+      springframework:
+        aop: DEBUG
