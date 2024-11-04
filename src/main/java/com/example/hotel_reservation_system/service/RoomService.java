@@ -1,17 +1,20 @@
 package com.example.hotel_reservation_system.service;
 
-import com.example.hotel_reservation_system.dto.HotelResponse;
-import com.example.hotel_reservation_system.dto.RoomRequest;
-import com.example.hotel_reservation_system.dto.RoomResponse;
-import com.example.hotel_reservation_system.entity.Hotel;
+import com.example.hotel_reservation_system.dto.*;
 import com.example.hotel_reservation_system.entity.Room;
 import com.example.hotel_reservation_system.mapper.HotelMapper;
 import com.example.hotel_reservation_system.mapper.RoomMapper;
-import com.example.hotel_reservation_system.repository.HotelRepository;
 import com.example.hotel_reservation_system.repository.RoomRepository;
+import com.example.hotel_reservation_system.specification.RoomSpecification;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +27,21 @@ public class RoomService {
     public RoomResponse getById(Long id) {
         return roomRepository.findById(id).map(roomMapper::roomToRoomResponse)
                 .orElseThrow(() -> new NotFoundException("Ккомната с ID = " + id + " не найдена."));
+    }
+
+    public Slice<RoomResponse> getFiltered(RoomFilter request, Pageable pageable) {
+        List<RoomResponse> result = roomRepository.findAll(new RoomSpecification(new HashMap<>() {{
+                    put("id", request.getId());
+                    put("title", request.getTitle());
+                    put("min", request.getMinPrice());
+                    put("max", request.getMaxPrice());
+                    put("guests", request.getNumberOfGuests());
+                    put("in", request.getCheckIn());
+                    put("out", request.getCheckIOut());
+                    put("hotel_id", request.getHotelId());
+                }}), pageable).stream()
+                .map(roomMapper::roomToRoomResponse).toList();
+        return new SliceImpl<>(result, pageable, result.iterator().hasNext());
     }
 
     public RoomResponse create(RoomRequest request) {

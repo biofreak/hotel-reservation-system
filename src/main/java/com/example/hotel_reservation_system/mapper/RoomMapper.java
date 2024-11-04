@@ -16,7 +16,7 @@ import org.mapstruct.*;
 )
 public interface RoomMapper {
     @Mappings({
-            @Mapping(source = "name", target = "name"),
+            @Mapping(source = "title", target = "title"),
             @Mapping(source = "description", target = "description"),
             @Mapping(source = "number", target = "number"),
             @Mapping(source = "price", target = "price"),
@@ -26,7 +26,7 @@ public interface RoomMapper {
     Room roomRequestToRoom(RoomRequest roomRequest);
 
     @Mappings({
-            @Mapping(source = "name", target = "name"),
+            @Mapping(source = "title", target = "title"),
             @Mapping(source = "description", target = "description"),
             @Mapping(source = "number", target = "number"),
             @Mapping(source = "price", target = "price"),
@@ -37,7 +37,7 @@ public interface RoomMapper {
 
     @Mappings({
             @Mapping(source = "id", target = "id"),
-            @Mapping(source = "name", target = "name"),
+            @Mapping(source = "title", target = "title"),
             @Mapping(source = "description", target = "description"),
             @Mapping(source = "number", target = "number"),
             @Mapping(source = "price", target = "price"),

@@ -17,7 +17,7 @@ public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
+    private String title;
     private String description;
     private Integer number;
     private Double price;
@@ -29,5 +29,5 @@ public class Room {
     private Map<Instant, Instant> occupation = new HashMap<>();
     @ManyToOne(fetch = FetchType.EAGER)
     @PrimaryKeyJoinColumn(name = "hotel_id", referencedColumnName = "id")
-    private com.example.hotel_reservation_system.entity.Hotel hotel;
+    private Hotel hotel;
 }

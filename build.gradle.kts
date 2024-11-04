@@ -32,14 +32,14 @@ dependencies {
 	implementation("javax.transaction:jta:1.1")
 
 	compileOnly("org.projectlombok:lombok")
-	compileOnly("org.mapstruct:mapstruct:1.5.3.Final")
+	compileOnly("org.mapstruct:mapstruct:1.6.2")
 	compileOnly("jakarta.ws.rs:jakarta.ws.rs-api")
 	compileOnly("org.glassfish.jersey.core:jersey-common")
 
 	runtimeOnly("org.postgresql:postgresql")
 
 	annotationProcessor("org.projectlombok:lombok")
-	annotationProcessor("org.mapstruct:mapstruct-processor:1.5.3.Final")
+	annotationProcessor("org.mapstruct:mapstruct-processor:1.6.2")
 	annotationProcessor("org.projectlombok:lombok-mapstruct-binding:0.2.0")
 
 	testImplementation("org.springframework.boot:spring-boot-starter-test")

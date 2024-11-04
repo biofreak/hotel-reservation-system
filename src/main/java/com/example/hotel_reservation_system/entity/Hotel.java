@@ -19,6 +19,7 @@ public class Hotel {
     private String city;
     private String address;
     private Float distance;
-    private Integer rating;
-    private Integer scores;
+    private Float rating;
+    @Column(name = "number_of_rating")
+    private Integer numberOfRating;
 }

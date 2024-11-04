@@ -14,5 +14,5 @@ public class HotelResponse {
     private String address;
     private Float distance;
     private Integer rating;
-    private Integer scores;
+    private Integer numberOfRating;
 }

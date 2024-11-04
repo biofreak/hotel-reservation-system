@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 @Data
 @RequiredArgsConstructor
 public class RoomRequest {
-    private String name;
+    private String title;
     private String description;
     @NotNull(message = "Для комнаты поле number должно быть заполнено.")
     private Integer number;

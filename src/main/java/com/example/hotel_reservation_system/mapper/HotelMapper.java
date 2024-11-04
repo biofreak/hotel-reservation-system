@@ -6,10 +6,9 @@ import com.example.hotel_reservation_system.dto.HotelResponse;
 import com.example.hotel_reservation_system.entity.Hotel;
 import com.example.hotel_reservation_system.service.HotelService;
 import org.mapstruct.*;
-import org.mapstruct.ap.internal.util.Services;
-import org.mapstruct.factory.Mappers;
 
 import java.util.Optional;
+import java.util.ServiceLoader;
 
 @Mapper(
         componentModel = MappingConstants.ComponentModel.SPRING,
@@ -18,7 +17,7 @@ import java.util.Optional;
 )
 @Named("HotelMapper")
 public interface HotelMapper {
-    HotelService hotelService = Services.get(HotelService.class, null);
+    HotelService hotelService = ServiceLoader.load(HotelService.class).findFirst().orElse(null);
 
     @Named("getHotelResponse")
     default HotelResponse getHotelResponse(Hotel hotel) {
@@ -44,7 +43,7 @@ public interface HotelMapper {
             @Mapping(source = "address", target = "address"),
             @Mapping(source = "distance", target = "distance"),
             @Mapping(source = "rating", target = "rating"),
-            @Mapping(source = "scores", target = "scores")
+            @Mapping(source = "numberOfRating", target = "numberOfRating")
     })
 
     HotelResponse hotelToHotelResponse(Hotel hotel);
@@ -63,7 +62,7 @@ public interface HotelMapper {
             @Mapping(source = "title", target = "title"),
             @Mapping(source = "city", target = "city"),
             @Mapping(source = "rating", target = "rating"),
-            @Mapping(source = "scores", target = "scores")
+            @Mapping(source = "numberOfRating", target = "numberOfRating")
     })
     HotelPagination hotelToHotelPagination(Hotel hotel);
 }

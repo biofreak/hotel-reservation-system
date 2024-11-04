@@ -13,5 +13,5 @@ public class HotelPagination {
     private String title;
     private String city;
     private Integer rating;
-    private Integer scores;
+    private Integer numberOfRating;
 }

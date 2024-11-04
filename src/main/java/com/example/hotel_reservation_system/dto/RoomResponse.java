@@ -14,7 +14,7 @@ import java.util.Map;
 @Builder
 public class RoomResponse {
     private Long id;
-    private String name;
+    private String title;
     private String description;
     private Integer number;
     private Double price;

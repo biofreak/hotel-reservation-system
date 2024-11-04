@@ -6,6 +6,8 @@ import com.example.hotel_reservation_system.dto.HotelRequest;
 import com.example.hotel_reservation_system.dto.HotelResponse;
 import com.example.hotel_reservation_system.service.HotelService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
@@ -35,9 +37,10 @@ public class HotelController {
 
     @GetMapping
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
-    public Slice<HotelPagination> getAllHotels(@RequestParam(value = "offset", required = false) Integer offset,
-                                                   @RequestParam(value = "limit", required = false) Integer limit) {
-        return hotelService.getAll(PageRequest.of(Optional.ofNullable(offset).isPresent() ? offset : 0,
+    public Slice<HotelPagination> getHotelsFiltered(@RequestParam(value = "offset", required = false) Integer offset,
+                                                    @RequestParam(value = "limit", required = false) Integer limit,
+                                                    @RequestBody HotelRequest request) {
+        return hotelService.getFiltered(request, PageRequest.of(Optional.ofNullable(offset).isPresent() ? offset : 0,
                 Optional.ofNullable(limit).isPresent() ? limit : properties.paginationLimit()));
     }
 
@@ -51,6 +54,13 @@ public class HotelController {
     @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
     public ResponseEntity<HotelResponse> updateHotel(@PathVariable Long id, @RequestBody HotelRequest request) {
         return new ResponseEntity<>(hotelService.update(id, request), HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}/rate")
+    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
+    public ResponseEntity<HotelResponse> rateHotel(@PathVariable Long id,
+                                                   @RequestParam("mark") @Min(1) @Max(5) Integer mark) {
+        return new ResponseEntity<>(hotelService.rate(id, mark), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
