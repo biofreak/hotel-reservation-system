@@ -29,7 +29,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableWebSecurity
 @EnableMethodSecurity
 @RequiredArgsConstructor
-public class HotelReservationConfiguration {
+public class SecurityConfiguration {
     private final UserService userService;
 
     @Bean

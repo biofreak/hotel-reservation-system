@@ -2,8 +2,6 @@ package com.example.hotel_reservation_system.service;
 
 import com.example.hotel_reservation_system.dto.ReservationRequest;
 import com.example.hotel_reservation_system.dto.ReservationResponse;
-import com.example.hotel_reservation_system.dto.RoomResponse;
-import com.example.hotel_reservation_system.dto.UserResponse;
 import com.example.hotel_reservation_system.entity.Reservation;
 import com.example.hotel_reservation_system.mapper.ReservationMapper;
 import com.example.hotel_reservation_system.repository.ReservationRepository;
@@ -13,10 +11,7 @@ import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +20,7 @@ public class ReservationService {
     private final RoomRepository roomRepository;
     private final UserRepository userRepository;
     private final ReservationMapper reservationMapper;
+    private final StatisticsService statisticsService;
 
     public Collection<ReservationResponse> getAll() {
         return new ArrayList<Reservation>() {{ reservationRepository.findAll().forEach(this::add); }}
@@ -34,14 +30,15 @@ public class ReservationService {
     public ReservationResponse create(ReservationRequest request) {
         return roomRepository.findById(request.getRoomId()).map(room -> {
             Reservation reservation = reservationMapper.reservationRequestToReservation(request);
-            reservation.setRoom(room);
             return userRepository.findById(request.getVisitorId()).map(user -> {
-                        reservation.setVisitor(user);
                         if(room.getOccupation().entrySet().stream()
                                 .filter(entry -> entry.getValue().isBefore(request.getCheckIn()))
                                 .filter(entry -> entry.getKey().isAfter(request.getCheckOut())).toList().isEmpty()) {
                             room.getOccupation().put(request.getCheckIn(), request.getCheckOut());
-                            roomRepository.save(room);
+                            reservation.setVisitor(user);
+                            reservation.setRoom(roomRepository.save(room));
+                            Optional.of(reservationRepository.save(reservation))
+                                    .ifPresent(statisticsService::sendReservation);
                             return reservationMapper.reservationToReservationResponse(reservation);
                         } else {
                             throw new NotFoundException("Бронирование на указанный период невозможно," +

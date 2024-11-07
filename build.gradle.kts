@@ -28,6 +28,9 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-security")
+	implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
+	implementation("org.springframework.kafka:spring-kafka")
+	implementation("org.mongodb.kafka:mongo-kafka-connect:1.13.1")
 	implementation("org.springframework.boot:spring-boot-starter-jta-atomikos:2.7.1")
 	implementation("javax.transaction:jta:1.1")
 

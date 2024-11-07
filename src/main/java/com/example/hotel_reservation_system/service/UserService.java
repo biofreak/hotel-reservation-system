@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,6 +18,7 @@ import org.springframework.stereotype.Service;
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final StatisticsService statisticsService;
 
     public Boolean usernameEmailExist(String username, String email) {
         return userRepository.existsByUsernameAndEmail(username, email);
@@ -34,7 +34,9 @@ public class UserService implements UserDetailsService {
                 .map(userMapper::userToUserResponse).orElseGet(() -> {
                     User user  = userMapper.userRequestToUser(request);
                     user.setRole(role);
-                    return userMapper.userToUserResponse(userRepository.save(user));
+                    user = userRepository.save(user);
+                    statisticsService.sendUser(user);
+                    return userMapper.userToUserResponse(user);
                 });
     }
 

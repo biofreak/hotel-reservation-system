@@ -1,11 +1,19 @@
 app:
   pagination-limit: 20
+  kafka:
+    kafkaReservationTopic: "reservation"
+    kafkaUserTopic: "user"
+    kafkaMessageGroupId: "kafka-message-group-id"
 
 spring:
   data:
+    mongodb:
+      uri: mongodb://root:root@localhost:27017
+      database: statistics_db
     jpa:
       repositories:
         enabled: true
+
   datasource:
     url: jdbc:postgresql://localhost:5432/reservation_db
     username: postgres
@@ -47,6 +55,9 @@ spring:
       name: admin
       password: 1308cf51-8da1-4aa0-966f-f3c0d0b066e7
       roles: ADMIN
+
+  kafka:
+    bootstrap-servers: localhost:9092
 
 logging:
   level:
