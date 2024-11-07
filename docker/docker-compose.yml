@@ -103,6 +103,7 @@ services:
                       "auto.register.schemas": false,
                       "value.converter": "org.apache.kafka.connect.json.JsonConverter",
                       "value.converter.schemas.enable": false,
+                      "document.id.strategy": "com.mongodb.kafka.connect.sink.processor.id.strategy.UuidStrategy",
                       "schemas.enable": false,
                       "cleanup.policy": "compact",
                       "topics": "reservation,user",

@@ -33,6 +33,8 @@ dependencies {
 	implementation("org.mongodb.kafka:mongo-kafka-connect:1.13.1")
 	implementation("org.springframework.boot:spring-boot-starter-jta-atomikos:2.7.1")
 	implementation("javax.transaction:jta:1.1")
+	implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-csv")
+	implementation("com.fasterxml.jackson.core:jackson-databind")
 
 	compileOnly("org.projectlombok:lombok")
 	compileOnly("org.mapstruct:mapstruct:1.6.2")
