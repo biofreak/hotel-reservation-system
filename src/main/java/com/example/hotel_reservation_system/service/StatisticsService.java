@@ -9,13 +9,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import lombok.RequiredArgsConstructor;
+import org.bson.Document;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import com.example.hotel_reservation_system.event.ReservationEvent;
 
+import java.io.IOException;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -46,17 +50,22 @@ public class StatisticsService {
     }
 
     public Resource get() {
-        try {
-            Resource resource = new FileSystemResource("statistics.csv");
-            CsvSchema.Builder csvSchemaBuilder = CsvSchema.builder();
-            String json = statisticsRepository.getAll().getRawResults().toJson();
-            JsonNode jsonTree = new ObjectMapper().readTree(json).get("results");
-            JsonNode firstObject = jsonTree.elements().next();
-            firstObject.fieldNames().forEachRemaining(csvSchemaBuilder::addColumn);
-            CsvSchema csvSchema = csvSchemaBuilder.build().withHeader();
-            new CsvMapper().writerFor(JsonNode.class).with(csvSchema).writeValue(resource.getFile(), jsonTree);
-            return resource;
-        } catch(Exception ignore) {}
-        return null;
+        Resource resource = new ClassPathResource("statistics.csv");
+        return Optional.ofNullable(statisticsRepository.getAll())
+                .map(AggregationResults::getRawResults)
+                .map(Document::toJson)
+                .map(json -> {
+                    try {
+                        CsvSchema.Builder csvSchemaBuilder = CsvSchema.builder();
+                        JsonNode tree = new ObjectMapper().readTree(json).get("results");
+                        JsonNode firstObject = tree.elements().next();
+                        firstObject.fieldNames().forEachRemaining(csvSchemaBuilder::addColumn);
+                        CsvSchema csvSchema = csvSchemaBuilder.build().withHeader();
+                        new CsvMapper().writerFor(JsonNode.class).with(csvSchema).writeValue(resource.getFile(), tree);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e.getMessage());
+                    }
+                    return resource;
+                }).orElse(null);
     }
 }
