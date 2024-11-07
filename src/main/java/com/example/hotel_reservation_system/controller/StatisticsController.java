@@ -3,7 +3,8 @@ package com.example.hotel_reservation_system.controller;
 import com.example.hotel_reservation_system.service.StatisticsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +20,12 @@ public class StatisticsController {
     @GetMapping
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public ResponseEntity<Resource> getStatistics() {
-        return new ResponseEntity<>(statisticsService.get(), HttpStatus.OK);
+        Resource resource = statisticsService.get();
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename='statistics.csv'");
+        headers.setContentType(MediaType.TEXT_PLAIN);
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(resource);
     }
 }
