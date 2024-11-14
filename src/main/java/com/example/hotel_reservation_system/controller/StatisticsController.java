@@ -22,7 +22,7 @@ public class StatisticsController {
     public ResponseEntity<Resource> getStatistics() {
         Resource resource = statisticsService.get();
         HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename='statistics.csv'");
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=statistics.csv");
         headers.setContentType(MediaType.TEXT_PLAIN);
         return ResponseEntity.ok()
                 .headers(headers)
