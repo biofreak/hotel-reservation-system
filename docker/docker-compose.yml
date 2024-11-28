@@ -61,7 +61,7 @@ services:
     environment:
       CONNECT_BOOTSTRAP_SERVERS: 'kafka:29092'
       CONNECT_REST_ADVERTISED_HOST_NAME: connect
-      CONNECT_GROUP_ID: '$${spring.app.kafka.kafkaMessageGroupId}'
+      CONNECT_GROUP_ID: kafka-message-group-id
       CONNECT_CONFIG_STORAGE_TOPIC: docker-connect-config
       CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR: 1
       CONNECT_OFFSET_FLUSH_INTERVAL_MS: 10000
