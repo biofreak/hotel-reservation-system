@@ -13,5 +13,4 @@ import lombok.NoArgsConstructor;
 public class UserEvent {
     @JsonProperty("user_id")
     private Long userId;
-
 }
